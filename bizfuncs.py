@@ -104,7 +104,7 @@ def connect_to_sql():
 # Function to store data in SQL
 def store_in_sql(data):
     conn, cursor = connect_to_sql()
-    sql = "INSERT INTO biz VALUES (%s,%s,%s,%s,%s,%s)"
+    sql = "INSERT INTO card_data VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     # vals = (
     #     data['name'],
     #     data['designation'],
@@ -113,8 +113,9 @@ def store_in_sql(data):
     #     data['url'],
     #     data['company']
     # )
+    # [name,designation,mobile,email,url,company,area,city,state,pincode,bizfuncs.img_to_binary(st.session_state['image_holder'])]
     vals = (
-        data[0],data[1],data[2],data[3],data[4],data[5],
+        data[5],data[0],data[1],data[2],data[3],data[4],data[6],data[7],data[8],data[9],data[10]
 
     )
     cursor.execute(sql,vals)
@@ -124,7 +125,7 @@ def store_in_sql(data):
 # Function to fetch data from SQL
 def fetch_data_from_sql():
     conn, cursor = connect_to_sql()
-    sql = "SELECT * FROM biz;"
+    sql = "SELECT * FROM card_data;"
     cursor.execute(sql)
     results = cursor.fetchall()
     return results
@@ -132,7 +133,7 @@ def fetch_data_from_sql():
 # Function to delete data from SQL
 def delete_data_from_sql(name):
     conn, cursor = connect_to_sql()
-    sql = "DELETE FROM biz WHERE name = %s"
+    sql = "DELETE FROM card_data WHERE card_holder = %s"
     vals = name
     cursor.execute(sql,vals)
     conn.commit()
@@ -141,7 +142,7 @@ def delete_data_from_sql(name):
 # FUnction to get the names from SQL
 def fetch_names_from_sql():
     conn, cursor = connect_to_sql()
-    sql = "SELECT name FROM biz;"
+    sql = "SELECT card_holder FROM card_data;"
     cursor.execute(sql)
     conn.commit()
     conn.close()
@@ -150,7 +151,14 @@ def fetch_names_from_sql():
 # Function to convert image to binary
 def img_to_binary(image):
     img = Image.open(image)
+    img = img.convert("RGB")
     binary_img = BytesIO()
     img.save(binary_img,format="JPEG")
     binary_img = binary_img.getvalue()
     return binary_img
+
+# def img_to_binary(file):
+#     # Convert image data to binary format
+#     with open(file, 'rb') as file:
+#         binaryData = file.read()
+#     return binaryData
